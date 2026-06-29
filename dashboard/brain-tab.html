@@ -1,0 +1,140 @@
+﻿<!--
+  brain-tab.html
+  ══════════════════════════════════════════════════════════════
+  Inner content of the Brain tab pane.
+  Paste this <section> block into dashboard.html, inside .main,
+  after the last existing tab-pane.
+
+  Also add to the sidebar nav:
+    <a class="nav-item" id="navBrain" href="#" data-tab="brain">
+      🧠
+      Brain
+    </a>
+
+  And add to dashboard.html <head>:
+    <link rel="stylesheet" href="brain-tab.css" />
+
+  And before </body>:
+    <script src="brain-tab.js"></script>
+
+  In dashboard.js wireNavigation(), after the existing pane switch,
+  add a hook so switching to Brain calls initBrainTab() once:
+    if (tab === 'brain') initBrainTab();
+  ══════════════════════════════════════════════════════════════
+-->
+
+<!-- ════════════════ TAB: BRAIN ══════════════════════════ -->
+<section class="tab-pane" id="paneBrain">
+
+  <!-- Page header -->
+  <div class="page-header">
+    <div class="page-header-text">
+      <h1 class="page-title">Brain</h1>
+      <p class="page-subtitle">Learned concepts, aliases, and confidence scores</p>
+    </div>
+  </div>
+
+  <!-- ── Status bar ──────────────────────────────────────── -->
+  <div class="brain-status-bar" id="brainStatusBar">
+    <span class="brain-status-text" id="brainStatusText">🧠 Brain active · — concepts · — aliases · — MB / 10 MB</span>
+    <button class="btn-secondary brain-refresh-btn" id="brainRefreshBtn" title="Refresh Brain stats">
+      <!-- Refresh icon -->
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+        <path d="M11 2.5A5.5 5.5 0 1 0 12 6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12 1v2.5H9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Refresh
+    </button>
+  </div>
+
+  <!-- ── Brain Settings group ────────────────────────────── -->
+  <div class="settings-group">
+    <div class="brain-section-title">Brain Settings</div>
+
+    <!-- Confidence threshold slider -->
+    <div class="setting-row no-border">
+      <div class="setting-info">
+        <div class="setting-label">Brain Confidence: <strong id="brainConfidenceLabel">75%</strong></div>
+        <div class="setting-desc">Minimum confidence required before Brain auto-fills a field</div>
+      </div>
+    </div>
+    <div class="slider-wrap">
+      <span class="slider-label-lo">Low</span>
+      <input type="range" class="slider" id="brainConfidenceSlider" min="30" max="95" value="75" />
+      <span class="slider-label-hi">High</span>
+    </div>
+
+    <!-- Auto-update toggle -->
+    <div class="setting-row no-border">
+      <div class="setting-info">
+        <div class="setting-label">Auto-update on low confidence</div>
+        <div class="setting-desc">Prompt to refine a concept when its confidence drops below threshold</div>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" id="brainAutoUpdateToggle" />
+        <div class="toggle-track"><div class="toggle-thumb"></div></div>
+      </label>
+    </div>
+  </div>
+
+  <!-- ── Concepts table ──────────────────────────────────── -->
+  <div class="settings-group">
+    <div class="brain-section-title">Concepts</div>
+
+    <!-- Table wrapper -->
+    <div class="brain-table-wrap" id="brainTableWrap">
+
+      <!-- Header row -->
+      <div class="brain-table-head">
+        <span class="brain-th brain-th-concept">Concept</span>
+        <span class="brain-th brain-th-value">Value</span>
+        <span class="brain-th brain-th-conf">Conf</span>
+        <span class="brain-th brain-th-manual">Manual Only</span>
+        <span class="brain-th brain-th-actions">Actions</span>
+      </div>
+
+      <!-- Rows injected by brain-tab.js -->
+      <div id="brainTableBody"></div>
+
+      <!-- Empty state -->
+      <div class="brain-empty hidden" id="brainEmpty">
+        <div class="brain-empty-icon">🧠</div>
+        <p class="brain-empty-title">No concepts yet</p>
+        <p class="brain-empty-sub">AutoFill will learn and store concepts as it fills forms</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Export / Import ────────────────────────────────── -->
+  <div class="settings-group">
+    <div class="brain-section-title">Data</div>
+    <div class="data-actions">
+      <button class="btn-secondary" id="brainExportBtn">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M7 1v8M4 6l3 3 3-3M1 10v1a2 2 0 002 2h8a2 2 0 002-2v-1"
+            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Export Brain JSON
+      </button>
+      <button class="btn-secondary" id="brainImportBtn">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M7 9V1M4 4L7 1l3 3M1 10v1a2 2 0 002 2h8a2 2 0 002-2v-1"
+            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Import Brain JSON
+      </button>
+      <input type="file" id="brainImportFile" accept=".json" style="display:none" />
+    </div>
+  </div>
+
+  <!-- ── Danger zone ─────────────────────────────────────── -->
+  <div class="settings-group">
+    <div class="brain-section-title">Danger Zone</div>
+    <div class="data-actions">
+      <button class="btn-danger" id="brainResetBtn">&#9888; Reset Brain</button>
+    </div>
+  </div>
+
+</section>
+<!-- ════════════════ /TAB: BRAIN ════════════════════════ -->

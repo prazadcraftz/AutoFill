@@ -1,0 +1,1035 @@
+/* ============================================================
+   AutoFill Extension — Skeuomorphic Popup Stylesheet v2
+   Design: leather-bound notepad, ruled paper, metal clip
+   Additions: fill preview panel (skeuomorphic paper slip style)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Caveat:wght@400;600&family=Patrick+Hand&display=swap');
+
+/* ── Reset & Body ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  width: 390px;
+  min-height: 560px;
+  background:
+    /* subtle noise */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E"),
+    linear-gradient(160deg, #2a1505 0%, #3d1f08 40%, #2a1505 100%);
+  font-family: 'Patrick Hand', cursive;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* ── Binder Clip ──────────────────────────────────────────── */
+.clip-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: -4px;
+  position: relative;
+  z-index: 10;
+}
+
+.clip {
+  position: relative;
+  width: 56px;
+}
+
+.clip-top {
+  width: 56px;
+  height: 10px;
+  background: linear-gradient(to bottom, #e8e0c8, #b8b0a0, #989090, #b8b0a0);
+  border-radius: 4px 4px 0 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.5);
+  border: 1px solid #787070;
+}
+
+.clip-arm {
+  position: absolute;
+  top: 5px;
+  width: 16px;
+  height: 26px;
+  background: linear-gradient(to right, #c0b8a8, #a8a098, #908890, #a8a098);
+  border: 1px solid #706868;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 2px 6px rgba(0,0,0,0.4);
+}
+
+.clip-arm-left {
+  left: 3px;
+  border-radius: 2px 0 6px 6px;
+  transform: rotate(-3deg);
+}
+
+.clip-arm-right {
+  right: 3px;
+  border-radius: 0 2px 6px 6px;
+  transform: rotate(3deg);
+}
+
+/* ── Notepad Container ────────────────────────────────────── */
+.notepad {
+  display: flex;
+  flex-direction: row;
+  margin: 0 10px 10px 10px;
+  border-radius: 4px 4px 6px 6px;
+  overflow: hidden;
+  box-shadow:
+    0 8px 24px rgba(0,0,0,0.7),
+    0 2px 4px rgba(0,0,0,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+  border: 1px solid #1a0a02;
+}
+
+/* ── Leather Spine ────────────────────────────────────────── */
+.spine {
+  width: 20px;
+  flex-shrink: 0;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      #5c3318 0px, #4a2810 2px,
+      #6b3d20 4px, #5c3318 6px
+    );
+  border-right: 2px solid #3a1c08;
+  box-shadow: inset -3px 0 6px rgba(0,0,0,0.4), 3px 0 6px rgba(0,0,0,0.3);
+  position: relative;
+}
+
+.spine::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(255,255,255,0.08) 0px,
+    rgba(255,255,255,0.08) 3px,
+    transparent 3px,
+    transparent 8px
+  );
+}
+
+/* Punch holes on spine */
+.hole {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #6b4226, #1a0a02);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.8), 0 1px 0 rgba(255,255,255,0.1);
+  border: 1px solid #1a0a02;
+}
+
+.hole-top  { top: 28px; }
+.hole-bottom { bottom: 28px; }
+
+/* ── Paper Area ───────────────────────────────────────────── */
+.paper {
+  flex: 1;
+  position: relative;
+  background-color: #f7f2e3;
+  background-image:
+    /* red margin line */
+    linear-gradient(to right, transparent 0px, transparent 0px),
+    /* horizontal rules */
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent 27px,
+      #d4c8b0 28px
+    );
+  overflow: hidden;
+}
+
+/* Faint left-margin red line */
+.paper::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(180, 60, 60, 0.35);
+  z-index: 1;
+}
+
+/* Paper top fold / dog-ear shadow */
+.paper::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 0; height: 0;
+  border-style: solid;
+  border-width: 0 16px 16px 0;
+  border-color: transparent #d4c8a8 transparent transparent;
+  filter: drop-shadow(-2px 2px 2px rgba(0,0,0,0.2));
+  z-index: 5;
+}
+
+/* Ruled lines overlay (sits on top for visibility) */
+.ruled-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Nameplate ────────────────────────────────────────────── */
+.nameplate {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px 10px 12px;
+  background:
+    linear-gradient(135deg, #7a4e2d 0%, #5c3318 50%, #7a4e2d 100%);
+  border-bottom: 3px solid #3d1f08;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.15);
+}
+
+/* Stitching along nameplate bottom */
+.nameplate::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 8px;
+  right: 8px;
+  height: 0;
+  border-top: 2px dashed rgba(255,210,120,0.5);
+}
+
+.nameplate-icon {
+  font-size: 22px;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.6));
+  line-height: 1;
+}
+
+.nameplate-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.nameplate-title {
+  font-family: 'Special Elite', cursive;
+  font-size: 18px;
+  color: #f5e8c0;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.6), 0 -1px 0 rgba(255,255,255,0.1);
+  letter-spacing: 1px;
+}
+
+.nameplate-sub {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 10px;
+  color: rgba(245,232,192,0.6);
+  letter-spacing: 0.5px;
+  margin-top: 1px;
+}
+
+/* ── LED Status ───────────────────────────────────────────── */
+.led-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: radial-gradient(circle at 40% 35%, #2a1a08, #1a0a02);
+  border-radius: 50%;
+  border: 2px solid #1a0a02;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.8), 0 1px 0 rgba(255,255,255,0.1);
+}
+
+.led {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #aaa, #555);
+  box-shadow: 0 0 3px rgba(0,0,0,0.6);
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+}
+
+.led.led-idle    { background: radial-gradient(circle at 40% 35%, #888, #555); box-shadow: 0 0 4px rgba(100,100,100,0.5); }
+.led.led-success { background: radial-gradient(circle at 40% 35%, #7eff7e, #1db01d); box-shadow: 0 0 8px rgba(50,200,50,0.9), 0 0 16px rgba(50,200,50,0.4); }
+.led.led-partial { background: radial-gradient(circle at 40% 35%, #ffdf60, #c88000); box-shadow: 0 0 8px rgba(220,160,0,0.9), 0 0 16px rgba(220,160,0,0.4); }
+.led.led-error   { background: radial-gradient(circle at 40% 35%, #ff7e7e, #b01d1d); box-shadow: 0 0 8px rgba(200,50,50,0.9), 0 0 16px rgba(200,50,50,0.4); }
+
+/* ── Tab Strip ────────────────────────────────────────────── */
+.tab-strip {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  background: linear-gradient(to bottom, #e8dfc8, #d4c8a8);
+  border-bottom: 2px solid #b8a880;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  margin-top: 8px;
+}
+
+.tab {
+  flex: 1;
+  padding: 7px 4px;
+  border: none;
+  font-family: 'Patrick Hand', cursive;
+  font-size: 13px;
+  cursor: pointer;
+  background: transparent;
+  color: #6b4226;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+  letter-spacing: 0.3px;
+}
+
+.tab:hover {
+  background: rgba(255,255,255,0.3);
+  color: #3d1f08;
+}
+
+.tab.active {
+  background: linear-gradient(to bottom, #f7f2e3, #f0ead0);
+  color: #3d1f08;
+  font-weight: 600;
+  border-bottom: 3px solid #c8881e;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* ── Tab Content ──────────────────────────────────────────── */
+.tab-content {
+  position: relative;
+  z-index: 2;
+}
+
+.tab-content.hidden { display: none; }
+
+/* ── Status Banner ────────────────────────────────────────── */
+.status-banner {
+  margin: 8px 10px 4px;
+  padding: 6px 12px;
+  border-radius: 3px;
+  border: 1px solid #c0a870;
+  background: linear-gradient(to right, #fdf6e3, #f5edd0);
+  font-size: 12px;
+  color: #4a3010;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.08), 0 1px 0 rgba(255,255,255,0.8);
+  font-family: 'Patrick Hand', cursive;
+}
+
+.status-banner.hidden { display: none; }
+
+.status-banner.success { border-color: #5a9040; background: linear-gradient(to right, #f0fae8, #e4f5d4); color: #2a5010; }
+.status-banner.partial { border-color: #c08030; background: linear-gradient(to right, #fff8e8, #fcefd0); color: #6a3800; }
+.status-banner.error   { border-color: #9a4040; background: linear-gradient(to right, #fdf0f0, #f5e0e0); color: #5a1010; }
+
+.status-icon { font-size: 14px; flex-shrink: 0; }
+
+/* ── Table Header ─────────────────────────────────────────── */
+.table-header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  padding: 5px 10px 5px 12px;
+  background: linear-gradient(to bottom, #e0d4b4, #ccc0a0);
+  border-bottom: 1px solid #b8a880;
+  border-top: 1px solid rgba(255,255,255,0.5);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  font-family: 'Special Elite', cursive;
+  font-size: 11px;
+  color: #5c3d18;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.col-label  { flex: 2; }
+.col-value  { flex: 3; }
+.col-del    { width: 28px; }
+
+/* ── Fields Scroll Container ──────────────────────────────── */
+.fields-scroll {
+  max-height: 244px;
+  overflow-y: auto;
+  position: relative;
+  z-index: 2;
+  scrollbar-width: thin;
+  scrollbar-color: #b8a880 transparent;
+}
+
+.fields-scroll::-webkit-scrollbar { width: 6px; }
+.fields-scroll::-webkit-scrollbar-thumb { background: #b8a880; border-radius: 3px; }
+.fields-scroll::-webkit-scrollbar-track { background: transparent; }
+
+/* ── Field Row ────────────────────────────────────────────── */
+.field-row {
+  display: flex;
+  align-items: center;
+  padding: 3px 10px 3px 12px;
+  border-bottom: 1px solid #d8ccb0;
+  min-height: 32px;
+  animation: rowSlideIn 0.2s ease-out;
+  transition: background 0.15s;
+}
+
+.field-row:hover { background: rgba(200,180,140,0.18); }
+
+@keyframes rowSlideIn {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.field-row input {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: 'Caveat', cursive;
+  font-size: 15px;
+  color: #2a1a08;
+  width: 100%;
+  padding: 1px 4px;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.field-row input:focus {
+  border-bottom: 1.5px solid #c8881e;
+  background: rgba(255,248,220,0.6);
+  border-radius: 2px 2px 0 0;
+}
+
+.field-row input::placeholder { color: #b8a880; font-style: italic; }
+
+.input-label-wrap { flex: 2; display: flex; align-items: center; }
+.input-value-wrap { flex: 3; display: flex; align-items: center; border-left: 1px dashed #d4c8b0; padding-left: 6px; }
+
+/* Delete button */
+.btn-del {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border: none;
+  background: radial-gradient(circle at 40% 35%, #d46060, #9a2020);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 1;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.25);
+  transition: all 0.12s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 6px;
+}
+
+.btn-del:hover  { background: radial-gradient(circle at 40% 35%, #e87070, #b02828); box-shadow: 0 3px 6px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.25); }
+.btn-del:active { transform: translateY(1px); box-shadow: 0 1px 2px rgba(0,0,0,0.4), inset 0 2px 4px rgba(0,0,0,0.3); }
+
+/* ── Add Field Button ─────────────────────────────────────── */
+.add-row-wrap {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  padding: 8px 0 4px;
+  border-top: 1px dashed #c8b890;
+}
+
+.btn-add {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 16px;
+  background: linear-gradient(to bottom, #f0e8c8, #d8c898, #c8b880);
+  border: 1px solid #a89060;
+  border-bottom: 2px solid #8a7040;
+  border-radius: 4px;
+  font-family: 'Patrick Hand', cursive;
+  font-size: 13px;
+  color: #5c3d18;
+  cursor: pointer;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.5);
+  transition: all 0.12s;
+  letter-spacing: 0.3px;
+}
+
+.btn-add:hover {
+  background: linear-gradient(to bottom, #f8f0d0, #e8d8a8, #d4c490);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.6);
+}
+
+.btn-add:active {
+  background: linear-gradient(to bottom, #c8b880, #d8c898, #e8d8b0);
+  transform: translateY(1px);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2), inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-add-icon {
+  font-size: 18px;
+  line-height: 1;
+  color: #7a5028;
+  font-weight: bold;
+}
+
+/* ── Footer Action Buttons ────────────────────────────────── */
+.footer-actions {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  gap: 10px;
+  padding: 10px 12px 14px;
+  background: linear-gradient(to bottom, #e8dfc8, #d8cca8);
+  border-top: 2px solid #c0b090;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.08);
+}
+
+/* Shared button style */
+.btn-save, .btn-fill {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 12px;
+  border-radius: 5px;
+  border: none;
+  font-family: 'Special Elite', cursive;
+  font-size: 14px;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  transition: all 0.12s;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-save {
+  background: linear-gradient(to bottom, #d8c870, #b09820, #c8a828);
+  color: #3d2a00;
+  border-top: 1px solid #e8d880;
+  border-left: 1px solid #c0a828;
+  border-right: 1px solid #a08018;
+  border-bottom: 3px solid #806010;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.35);
+  text-shadow: 0 1px 0 rgba(255,255,255,0.2);
+}
+
+.btn-save:hover {
+  background: linear-gradient(to bottom, #e8d880, #c0a830, #d8b838);
+  box-shadow: 0 5px 10px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.4);
+}
+
+.btn-save:active {
+  background: linear-gradient(to bottom, #a08018, #c0a828, #b89820);
+  transform: translateY(2px);
+  border-bottom-width: 1px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3), inset 0 2px 4px rgba(0,0,0,0.15);
+}
+
+.btn-fill {
+  background: linear-gradient(to bottom, #6aac48, #3a8018, #4a9020);
+  color: #f0fce8;
+  border-top: 1px solid #88cc60;
+  border-left: 1px solid #4aA020;
+  border-right: 1px solid #388010;
+  border-bottom: 3px solid #206000;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.25);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+
+.btn-fill:hover {
+  background: linear-gradient(to bottom, #7ec060, #4a9028, #5aa030);
+  box-shadow: 0 5px 10px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.3);
+}
+
+.btn-fill:active {
+  background: linear-gradient(to bottom, #306010, #408020, #389018);
+  transform: translateY(2px);
+  border-bottom-width: 1px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3), inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.btn-icon { font-size: 16px; line-height: 1; }
+
+/* ── Settings Panel ───────────────────────────────────────── */
+.settings-section {
+  position: relative;
+  z-index: 2;
+  padding: 10px 14px;
+  border-bottom: 1px solid #d4c8b0;
+}
+
+.settings-label {
+  font-family: 'Special Elite', cursive;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #7a5028;
+  margin-bottom: 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px dashed #d4b890;
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 0;
+  cursor: pointer;
+  font-size: 13px;
+  color: #3d2408;
+  font-family: 'Patrick Hand', cursive;
+}
+
+.toggle-row span { flex: 1; }
+
+/* Custom toggle switch */
+.toggle-wrap { position: relative; }
+.toggle-wrap input[type="checkbox"] { position: absolute; opacity: 0; width: 0; height: 0; }
+
+.toggle-track {
+  width: 42px;
+  height: 22px;
+  background: linear-gradient(to bottom, #b8a888, #a09070);
+  border-radius: 11px;
+  border: 1px solid #887850;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.3), 0 1px 0 rgba(255,255,255,0.2);
+  cursor: pointer;
+  transition: background 0.3s;
+  position: relative;
+}
+
+.toggle-wrap input:checked + .toggle-track {
+  background: linear-gradient(to bottom, #4a9820, #306010);
+  border-color: #206000;
+}
+
+.toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f8f0d8, #d8c898);
+  border: 1px solid #b8a878;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.6);
+  transition: left 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.toggle-wrap input:checked + .toggle-track .toggle-thumb {
+  left: 20px;
+  background: linear-gradient(135deg, #e8f8d0, #c8e8a0);
+}
+
+/* Slider */
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.slider-lo, .slider-hi {
+  font-size: 11px;
+  color: #7a5028;
+  font-family: 'Patrick Hand', cursive;
+  white-space: nowrap;
+}
+
+.paper-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  height: 8px;
+  border-radius: 4px;
+  background: linear-gradient(to bottom, #b8a888, #d4c8a8);
+  border: 1px solid #a09070;
+  box-shadow: inset 0 2px 3px rgba(0,0,0,0.25);
+  outline: none;
+  cursor: pointer;
+}
+
+.paper-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f8f0d8, #c8a848);
+  border: 2px solid #a08028;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.5);
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.paper-slider::-webkit-slider-thumb:active { transform: scale(1.15); }
+
+.slider-value-row {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 12px;
+  color: #5c3d18;
+  text-align: center;
+}
+
+.slider-value-row strong {
+  font-family: 'Special Elite', cursive;
+  color: #3d2408;
+}
+
+/* Management buttons */
+.btn-mgmt {
+  display: block;
+  width: 100%;
+  padding: 7px 12px;
+  margin-bottom: 6px;
+  background: linear-gradient(to bottom, #f0e8c8, #d8c898, #c8b880);
+  border: 1px solid #a89060;
+  border-bottom: 2px solid #887040;
+  border-radius: 4px;
+  font-family: 'Patrick Hand', cursive;
+  font-size: 13px;
+  color: #4a3010;
+  cursor: pointer;
+  text-align: left;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.4);
+  transition: all 0.12s;
+}
+
+.btn-mgmt:hover { background: linear-gradient(to bottom, #f8f0d0, #e0d0a0, #d0c088); box-shadow: 0 3px 6px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.5); }
+.btn-mgmt:active { transform: translateY(1px); border-bottom-width: 1px; box-shadow: 0 1px 2px rgba(0,0,0,0.15); }
+
+.btn-mgmt.danger {
+  background: linear-gradient(to bottom, #e8c8c8, #c89898, #b88080);
+  border-color: #906060;
+  border-bottom-color: #704040;
+  color: #5a1010;
+}
+
+.btn-mgmt.danger:hover { background: linear-gradient(to bottom, #f0d0d0, #d0a0a0, #c09090); }
+
+/* ── Slider hint ─────────────────────────────────────────── */
+.slider-hint {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 11px;
+  color: #8b6430;
+  text-align: center;
+  font-style: italic;
+  margin-top: 2px;
+}
+
+/* ── Settings note block ──────────────────────────────────── */
+.settings-note p {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 12px;
+  color: #4a3010;
+  line-height: 1.5;
+}
+.settings-note code {
+  font-family: monospace;
+  font-size: 11px;
+  background: rgba(0,0,0,0.06);
+  padding: 1px 4px;
+  border-radius: 3px;
+  color: #3d2408;
+}
+
+/* ── Utility ──────────────────────────────────────────────── */
+.hidden { display: none !important; }
+
+/* ── Paper texture noise overlay ─────────────────────────── */
+.paper::before { pointer-events: none; }
+
+/* ============================================================
+   FILL PREVIEW OVERLAY — FIX #4
+   Looks like a paper sheet sliding up over the notepad
+   ============================================================ */
+
+.preview-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(30, 12, 2, 0.70);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  animation: overlayFadeIn 0.2s ease;
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.preview-panel {
+  width: 370px;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #faf5e4;
+  background-image:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent 27px,
+      #d4c8b0 28px
+    );
+  border: 1px solid #c0a870;
+  border-bottom: none;
+  border-radius: 10px 10px 0 0;
+  box-shadow:
+    0 -6px 24px rgba(0,0,0,0.5),
+    0 -2px 8px rgba(0,0,0,0.3),
+    inset 0 1px 0 rgba(255,255,255,0.7);
+  animation: panelSlideUp 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Stitching along panel top edge */
+.preview-panel::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 14px;
+  right: 14px;
+  height: 0;
+  border-top: 2px dashed rgba(180, 140, 60, 0.45);
+  z-index: 1;
+  pointer-events: none;
+}
+
+@keyframes panelSlideUp {
+  from { transform: translateY(100%); opacity: 0.5; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* ── Preview header ─────────────────────────────────────────── */
+.preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px 10px;
+  background: linear-gradient(135deg, #7a4e2d 0%, #5c3318 50%, #7a4e2d 100%);
+  border-bottom: 2px solid #3d1f08;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  position: relative;
+  z-index: 2;
+}
+
+.preview-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.preview-stamp-icon {
+  font-size: 22px;
+  line-height: 1;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));
+}
+
+.preview-title {
+  font-family: 'Special Elite', cursive;
+  font-size: 16px;
+  color: #f5e8c0;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  letter-spacing: 0.5px;
+}
+
+.preview-subtitle {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 11px;
+  color: rgba(245,232,192,0.65);
+  margin-top: 1px;
+}
+
+.preview-close-btn {
+  width: 26px;
+  height: 26px;
+  border: 1px solid #8b6030;
+  background: radial-gradient(circle at 40% 35%, #d46060, #9a2020);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 12px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.12s;
+  flex-shrink: 0;
+}
+
+.preview-close-btn:hover  { background: radial-gradient(circle at 40% 35%, #e87070, #b02828); }
+.preview-close-btn:active { transform: scale(0.93); }
+
+/* ── Legend strip ──────────────────────────────────────────── */
+.preview-legend {
+  display: flex;
+  gap: 12px;
+  padding: 6px 14px;
+  background: linear-gradient(to bottom, #e8dfc8, #ddd4b4);
+  border-bottom: 1px solid #c8b890;
+  position: relative;
+  z-index: 2;
+}
+
+.legend-item {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  border: 1px solid;
+}
+
+.legend-item.match    { background: #e8f8d0; border-color: #5a9040; color: #2a5010; }
+.legend-item.filled   { background: #fff8e0; border-color: #c09030; color: #6a3800; }
+.legend-item.nomatch  { background: #f0f0f0; border-color: #aaa;    color: #555;    }
+
+/* ── Scrollable list ────────────────────────────────────────── */
+.preview-scroll {
+  flex: 1;
+  overflow-y: auto;
+  position: relative;
+  z-index: 2;
+  scrollbar-width: thin;
+  scrollbar-color: #b8a880 transparent;
+}
+
+.preview-scroll::-webkit-scrollbar { width: 5px; }
+.preview-scroll::-webkit-scrollbar-thumb { background: #b8a880; border-radius: 3px; }
+
+/* ── Preview item row ───────────────────────────────────────── */
+.preview-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border-bottom: 1px solid #d8ccb0;
+  position: relative;
+  transition: background 0.15s;
+}
+
+.preview-item:hover { background: rgba(200,180,140,0.15); }
+
+/* Left accent stripe by type */
+.preview-item::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+}
+.preview-item.match::before    { background: #4a9020; }
+.preview-item.prefilled::before { background: #c08030; }
+.preview-item.nomatch::before  { background: #aaa; }
+
+.preview-item-stamp {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: bold;
+  flex-shrink: 0;
+  border: 1.5px solid;
+}
+
+.preview-item.match    .preview-item-stamp { background: #d8f0c0; border-color: #5a9040; color: #2a5010; }
+.preview-item.prefilled .preview-item-stamp { background: #fdf0d0; border-color: #c09030; color: #6a3800; }
+.preview-item.nomatch  .preview-item-stamp { background: #ececec; border-color: #aaa;    color: #777;    }
+
+.preview-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.preview-q-label {
+  font-family: 'Patrick Hand', cursive;
+  font-size: 13px;
+  color: #2a1a08;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.preview-match-line {
+  font-family: 'Caveat', cursive;
+  font-size: 13px;
+  color: #4a3010;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+}
+
+.preview-arrow   { color: #8b6030; font-size: 12px; }
+.preview-value   { color: #1a5010; }
+.preview-score   { color: #8b8060; font-size: 11px; font-family: 'Patrick Hand', cursive; }
+.preview-note    { color: #c08030; font-size: 11px; font-style: italic; }
+.preview-no-match-text { color: #999; font-style: italic; font-size: 12px; font-family: 'Patrick Hand', cursive; }
+
+/* ── Per-row confirm toggle ────────────────────────────────── */
+.preview-toggle-cell {
+  flex-shrink: 0;
+}
+
+.preview-toggle-wrap {
+  /* inherits .toggle-wrap styles, smaller scale */
+  transform: scale(0.85);
+  transform-origin: right center;
+}
+
+/* ── Preview footer ─────────────────────────────────────────── */
+.preview-footer {
+  display: flex;
+  gap: 10px;
+  padding: 10px 12px 12px;
+  background: linear-gradient(to bottom, #e8dfc8, #d8cca8);
+  border-top: 2px solid #c0b090;
+  position: relative;
+  z-index: 2;
+}
+
+.btn-preview-cancel {
+  flex: 1;
+  padding: 8px 12px;
+  background: linear-gradient(to bottom, #e8d8b8, #c8b888);
+  border: 1px solid #a89060;
+  border-bottom: 2px solid #887040;
+  border-radius: 5px;
+  font-family: 'Patrick Hand', cursive;
+  font-size: 14px;
+  color: #5c3d18;
+  cursor: pointer;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.4);
+  transition: all 0.12s;
+}
+
+.btn-preview-cancel:hover  { background: linear-gradient(to bottom, #f0e8c8, #d8c898); }
+.btn-preview-cancel:active { transform: translateY(1px); border-bottom-width: 1px; }
+
+.btn-preview-confirm {
+  flex: 2;
+  padding: 8px 12px;
+  background: linear-gradient(to bottom, #6aac48, #3a8018, #4a9020);
+  border: 1px solid #4aA020;
+  border-top-color: #88cc60;
+  border-bottom: 3px solid #206000;
+  border-radius: 5px;
+  font-family: 'Special Elite', cursive;
+  font-size: 14px;
+  color: #f0fce8;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+  letter-spacing: 0.3px;
+  transition: all 0.12s;
+}
+
+.btn-preview-confirm:hover  { background: linear-gradient(to bottom, #7ec060, #4a9028, #5aa030); }
+.btn-preview-confirm:active { transform: translateY(2px); border-bottom-width: 1px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }

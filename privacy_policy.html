@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AutoFill — Privacy Policy</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      color: #1a1a1a;
+      background: #f9f9f9;
+      padding: 40px 20px;
+    }
+    .container { max-width: 720px; margin: 0 auto; background: #fff; border-radius: 12px; padding: 48px; box-shadow: 0 2px 16px rgba(0,0,0,.07); }
+    h1 { font-size: 26px; font-weight: 700; margin-bottom: 6px; }
+    .subtitle { color: #666; font-size: 13px; margin-bottom: 36px; }
+    h2 { font-size: 16px; font-weight: 600; margin: 28px 0 10px; }
+    p, li { color: #333; margin-bottom: 10px; }
+    ul { padding-left: 22px; }
+    li { margin-bottom: 6px; }
+    .highlight { background: #f0f4ff; border-left: 3px solid #1a1a1a; padding: 12px 16px; border-radius: 4px; margin: 20px 0; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Privacy Policy</h1>
+  <p class="subtitle">AutoFill — Smart Form Filler &nbsp;·&nbsp; Last updated: June 2025</p>
+
+  <div class="highlight">
+    <strong>Summary:</strong> AutoFill stores all your data exclusively on your own device using
+    Chrome's built-in <code>chrome.storage.local</code>. Nothing is ever sent to any server,
+    third party, or external service.
+  </div>
+
+  <h2>1. What data we store</h2>
+  <ul>
+    <li><strong>My Info fields</strong> — The labels and values you enter (e.g. name, email, phone). Stored in <code>chrome.storage.local</code> as <code>autofill_fields</code>.</li>
+    <li><strong>Brain data</strong> — A learning index of form-label aliases and confidence scores that the extension builds automatically as you use it. Stored as <code>af_concepts</code>, <code>af_aliases</code>, and <code>af_confidence</code>.</li>
+    <li><strong>Settings</strong> — Your preferences (fill threshold, skip preview, etc.). Stored as <code>autofill_settings</code>.</li>
+  </ul>
+
+  <h2>2. Where data is stored</h2>
+  <p>
+    All data is stored locally on your device using the <code>chrome.storage.local</code> API,
+    which is sandboxed to this extension only. No other website, extension, or application can
+    access it.
+  </p>
+
+  <h2>3. What data we do NOT collect</h2>
+  <ul>
+    <li>We do not transmit any data to any server.</li>
+    <li>We do not use analytics, telemetry, or crash reporting services.</li>
+    <li>We do not use cookies or any tracking mechanisms.</li>
+    <li>We do not access any Google Account or Google Forms account data.</li>
+    <li>We do not read the content of any website other than Google Forms pages you explicitly open.</li>
+  </ul>
+
+  <h2>4. Permissions explained</h2>
+  <ul>
+    <li><strong>storage</strong> — To save your My Info fields and Brain data locally on your device.</li>
+    <li><strong>activeTab</strong> — To detect when you are on a Google Forms page and activate the fill button.</li>
+    <li><strong>scripting</strong> — To inject the fill action into the active Google Forms tab when you click Fill.</li>
+    <li><strong>tabs</strong> — To communicate between the popup and the active form tab after a fill is complete.</li>
+    <li><strong>host_permissions (docs.google.com/forms/*)</strong> — To run the content script exclusively on Google Forms pages.</li>
+  </ul>
+
+  <h2>5. Data export and deletion</h2>
+  <p>
+    You can export all Brain data as a JSON file from the Dashboard → Brain tab at any time.
+    You can delete all stored data by clicking <strong>Reset Brain</strong> in the Brain tab,
+    or by removing the extension entirely from Chrome, which automatically clears all
+    <code>chrome.storage.local</code> data.
+  </p>
+
+  <h2>6. Changes to this policy</h2>
+  <p>
+    If this policy changes, the updated version will be included with the next extension update
+    published to the Chrome Web Store. Continued use of the extension constitutes acceptance of
+    the updated policy.
+  </p>
+
+  <h2>7. Contact</h2>
+  <p>
+    For questions or concerns about this privacy policy, please open an issue on the
+    extension's GitHub repository.
+  </p>
+</div>
+</body>
+</html>

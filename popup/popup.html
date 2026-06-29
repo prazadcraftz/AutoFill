@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AutoFill — Smart Form Filler</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════════════════
+       MAIN NOTEPAD VIEW
+  ══════════════════════════════════════════════════════════ -->
+
+  <!-- Binder clip decoration -->
+  <div class="clip-wrap">
+    <div class="clip">
+      <div class="clip-top"></div>
+      <div class="clip-arm clip-arm-left"></div>
+      <div class="clip-arm clip-arm-right"></div>
+    </div>
+  </div>
+
+  <!-- Main notepad body -->
+  <div class="notepad">
+
+    <!-- Leather spine / left margin -->
+    <div class="spine">
+      <div class="hole hole-top"></div>
+      <div class="hole hole-bottom"></div>
+    </div>
+
+    <!-- Content area (the paper) -->
+    <div class="paper">
+
+      <!-- Header nameplate -->
+      <div class="nameplate">
+        <div class="nameplate-icon">✒</div>
+        <div class="nameplate-text">
+          <span class="nameplate-title">AutoFill</span>
+          <span class="nameplate-sub">Smart Form Filler</span>
+        </div>
+        <div class="led-wrap">
+          <div class="led led-idle" id="statusLed" title="Status"></div>
+        </div>
+      </div>
+
+      <!-- Tab strip -->
+      <div class="tab-strip">
+        <button class="tab active" id="tabInfo"     onclick="switchTab('info')">📋 My Info</button>
+        <button class="tab"        id="tabSettings" onclick="switchTab('settings')">⚙ Settings</button>
+      </div>
+
+      <!-- ══════════════════ TAB: My Info ════════════════════ -->
+      <div class="tab-content" id="panelInfo">
+
+        <!-- Status banner -->
+        <div class="status-banner hidden" id="statusBanner">
+          <span class="status-icon" id="statusIcon">●</span>
+          <span id="statusText">Ready</span>
+        </div>
+
+        <!-- Ruled field table -->
+        <div class="table-header">
+          <span class="col-label">Field Name</span>
+          <span class="col-value">Value</span>
+          <span class="col-del"></span>
+        </div>
+
+        <div class="fields-scroll">
+          <div id="fieldsContainer"></div>
+        </div>
+
+        <div class="add-row-wrap">
+          <button class="btn-add" id="btnAddField" title="Add a new field">
+            <span class="btn-add-icon">+</span> Add Field
+          </button>
+        </div>
+
+      </div>
+
+      <!-- ══════════════════ TAB: Settings ══════════════════ -->
+      <div class="tab-content hidden" id="panelSettings">
+
+        <div class="settings-section">
+          <div class="settings-label">Fill Behaviour</div>
+          <label class="toggle-row">
+            <span>Overwrite already-filled fields</span>
+            <div class="toggle-wrap">
+              <input type="checkbox" id="settingOverwrite" />
+              <div class="toggle-track"><div class="toggle-thumb"></div></div>
+            </div>
+          </label>
+          <label class="toggle-row">
+            <span>Show confidence score in report</span>
+            <div class="toggle-wrap">
+              <input type="checkbox" id="settingShowScore" checked />
+              <div class="toggle-track"><div class="toggle-thumb"></div></div>
+            </div>
+          </label>
+          <label class="toggle-row">
+            <span>Skip preview (fill immediately)</span>
+            <div class="toggle-wrap">
+              <input type="checkbox" id="settingSkipPreview" />
+              <div class="toggle-track"><div class="toggle-thumb"></div></div>
+            </div>
+          </label>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-label">Match Sensitivity</div>
+          <div class="slider-row">
+            <span class="slider-lo">Loose</span>
+            <input type="range" id="settingThreshold" min="30" max="95" value="72" class="paper-slider" />
+            <span class="slider-hi">Strict</span>
+          </div>
+          <div class="slider-value-row">
+            Threshold: <strong id="thresholdVal">72%</strong>
+          </div>
+          <div class="slider-hint">72% recommended for placement forms</div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-label">Data Management</div>
+          <button class="btn-mgmt" id="btnExport">📤 Export JSON</button>
+          <button class="btn-mgmt" id="btnImport">📥 Import JSON</button>
+          <input type="file" id="importFile" accept=".json" style="display:none" />
+          <button class="btn-mgmt danger" id="btnClearAll">🗑 Clear All Data</button>
+        </div>
+
+        <div class="settings-section settings-note">
+          <div class="settings-label">🔒 Privacy</div>
+          <p>All data is stored <strong>locally on this device only</strong> using <code>chrome.storage.local</code>. Nothing is synced to Google servers.</p>
+        </div>
+
+      </div>
+
+      <!-- Footer action buttons -->
+      <div class="footer-actions">
+        <button class="btn-save" id="btnSave">
+          <span class="btn-icon">💾</span> Save
+        </button>
+        <button class="btn-fill" id="btnFill">
+          <span class="btn-icon">🔍</span> Scan Form
+        </button>
+      </div>
+
+    </div><!-- .paper -->
+  </div><!-- .notepad -->
+
+
+  <!-- ══════════════════════════════════════════════════════
+       FILL PREVIEW OVERLAY (Phase 2 — confirm before fill)
+  ══════════════════════════════════════════════════════════ -->
+  <div class="preview-overlay hidden" id="previewOverlay" role="dialog" aria-modal="true" aria-label="Fill Preview">
+    <div class="preview-panel">
+
+      <!-- Preview header (leather nameplate style) -->
+      <div class="preview-header">
+        <div class="preview-header-left">
+          <div class="preview-stamp-icon">📋</div>
+          <div>
+            <div class="preview-title">Fill Preview</div>
+            <div class="preview-subtitle" id="previewSubtitle">Review matches before filling</div>
+          </div>
+        </div>
+        <button class="preview-close-btn" id="btnPreviewClose" title="Cancel">✕</button>
+      </div>
+
+      <!-- Legend -->
+      <div class="preview-legend">
+        <span class="legend-item match">✔ Match</span>
+        <span class="legend-item filled">⏭ Pre-filled</span>
+        <span class="legend-item nomatch">✖ No match</span>
+      </div>
+
+      <!-- Scrollable list -->
+      <div class="preview-scroll" id="previewList">
+        <!-- Items injected by popup.js -->
+      </div>
+
+      <!-- Footer with confirm/cancel -->
+      <div class="preview-footer">
+        <button class="btn-preview-cancel"  id="btnPreviewCancel">Cancel</button>
+        <button class="btn-preview-confirm" id="btnPreviewConfirm">🖊 Confirm &amp; Fill</button>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

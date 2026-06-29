@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AutoFill — Dashboard</title>
+  <link rel="stylesheet" href="fonts.css" />
+  <link rel="stylesheet" href="dashboard.css" />
+  <link rel="stylesheet" href="brain-tab.css" />
+</head>
+<body>
+
+  <!-- ── App Shell ─────────────────────────────────────────── -->
+  <div class="app">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-mark">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <rect width="20" height="20" rx="5" fill="#0A0A0A"/>
+            <path d="M5 7h10M5 10h7M5 13h5" stroke="white" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="logo-name">AutoFill</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a class="nav-item active" id="navFields" href="#" data-tab="fields">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none">
+            <path d="M3 5h14M3 10h10M3 15h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          My Info
+        </a>
+        <a class="nav-item" id="navSettings" href="#" data-tab="settings">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M10 3v1.5M10 15.5V17M3 10H4.5M15.5 10H17M5.05 5.05l1.06 1.06M13.89 13.89l1.06 1.06M14.95 5.05l-1.06 1.06M6.11 13.89l-1.06 1.06"
+              stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          Settings
+        </a>
+        <a class="nav-item" id="navBrain" href="#" data-tab="brain">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none">
+            <path d="M10 3C7.2 3 5 5.2 5 8c0 1.4.6 2.7 1.5 3.6C5.6 12.3 5 13.6 5 15h10c0-1.4-.6-2.7-1.5-3.4C14.4 10.7 15 9.4 15 8c0-2.8-2.2-5-5-5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8 15v2M12 15v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          Brain
+        </a>
+        <a class="nav-item" id="navAbout" href="#" data-tab="about">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M10 9v6M10 7v.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          About
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <span class="version-tag">v3.0.0</span>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="main">
+
+      <!-- ════════════════ TAB: MY INFO ════════════════════ -->
+      <section class="tab-pane active" id="paneFields">
+
+        <div class="page-header">
+          <div class="page-header-text">
+            <h1 class="page-title">My Information</h1>
+            <p class="page-subtitle">Stored fields used to auto-fill Google Forms</p>
+          </div>
+          <button class="btn-secondary" id="btnAddField">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+            Add Field
+          </button>
+        </div>
+
+        <!-- Status bar -->
+        <div class="status-bar hidden" id="statusBar">
+          <span class="status-dot" id="statusDot"></span>
+          <span id="statusMsg">Saved</span>
+        </div>
+
+        <!-- Field table -->
+        <div class="table-wrap">
+          <table class="field-table" id="fieldTable">
+            <thead>
+              <tr>
+                <th class="col-name">Field Name</th>
+                <th class="col-value">Value</th>
+                <th class="col-actions"></th>
+              </tr>
+            </thead>
+            <tbody id="fieldsBody">
+              <!-- rows injected by dashboard.js -->
+            </tbody>
+          </table>
+          <div class="table-empty hidden" id="tableEmpty">
+            <div class="empty-icon">
+              <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                <rect x="8" y="8" width="24" height="24" rx="4" stroke="#D4D4D4" stroke-width="1.5"/>
+                <path d="M14 16h12M14 20h8M14 24h6" stroke="#D4D4D4" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <p class="empty-title">No fields yet</p>
+            <p class="empty-subtitle">Add fields that AutoFill will use to fill your Google Forms</p>
+            <button class="btn-primary" id="btnAddFieldEmpty">+ Add your first field</button>
+          </div>
+        </div>
+
+        <div class="page-footer">
+          <div class="footer-left">
+            <span class="field-count" id="fieldCount">0 fields</span>
+          </div>
+          <div class="footer-right">
+            <button class="btn-primary" id="btnSave">Save Changes</button>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ════════════════ TAB: SETTINGS ══════════════════ -->
+      <section class="tab-pane" id="paneSettings">
+
+        <div class="page-header">
+          <div class="page-header-text">
+            <h1 class="page-title">Settings</h1>
+            <p class="page-subtitle">Customize how AutoFill behaves</p>
+          </div>
+        </div>
+
+        <!-- Fill Behaviour -->
+        <div class="settings-group">
+          <div class="settings-group-title">Fill Behaviour</div>
+
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Overwrite already-filled fields</div>
+              <div class="setting-desc">Fill fields even if they already have a value</div>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="sOverwrite" />
+              <div class="toggle-track"><div class="toggle-thumb"></div></div>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Skip preview (fill immediately)</div>
+              <div class="setting-desc">Fill without showing the match review panel</div>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="sSkipPreview" />
+              <div class="toggle-track"><div class="toggle-thumb"></div></div>
+            </label>
+          </div>
+
+          <div class="setting-row">
+            <div class="setting-info">
+              <div class="setting-label">Show confidence score</div>
+              <div class="setting-desc">Display match percentage in the preview panel</div>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="sShowScore" checked />
+              <div class="toggle-track"><div class="toggle-thumb"></div></div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Match Sensitivity -->
+        <div class="settings-group">
+          <div class="settings-group-title">Match Sensitivity</div>
+
+          <div class="setting-row no-border">
+            <div class="setting-info">
+              <div class="setting-label">Threshold: <strong id="thresholdDisplay">72%</strong></div>
+              <div class="setting-desc">Higher = stricter matching. 72% recommended for placement forms.</div>
+            </div>
+          </div>
+          <div class="slider-wrap">
+            <span class="slider-label-lo">Loose</span>
+            <input type="range" class="slider" id="sThreshold" min="30" max="95" value="72" />
+            <span class="slider-label-hi">Strict</span>
+          </div>
+        </div>
+
+        <!-- Data Management -->
+        <div class="settings-group">
+          <div class="settings-group-title">Data Management</div>
+
+          <div class="data-actions">
+            <button class="btn-secondary" id="btnExport">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M7 1v8M4 6l3 3 3-3M1 10v1a2 2 0 002 2h8a2 2 0 002-2v-1"
+                  stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Export JSON
+            </button>
+            <button class="btn-secondary" id="btnImport">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M7 9V1M4 4L7 1l3 3M1 10v1a2 2 0 002 2h8a2 2 0 002-2v-1"
+                  stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Import JSON
+            </button>
+            <input type="file" id="importFile" accept=".json" style="display:none" />
+            <button class="btn-danger" id="btnClear">Clear All Data</button>
+          </div>
+
+          <!-- Privacy notice -->
+          <div class="privacy-notice">
+            <div class="privacy-icon">🔒</div>
+            <div class="privacy-text">
+              All data is stored <strong>locally on this device only</strong> using
+              <code>chrome.storage.local</code> — nothing is uploaded to Google servers or any third party.
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ════════════════ TAB: ABOUT ═════════════════════ -->
+      <section class="tab-pane" id="paneAbout">
+
+        <div class="page-header">
+          <div class="page-header-text">
+            <h1 class="page-title">About AutoFill</h1>
+            <p class="page-subtitle">Smart Form Filler for Google Forms</p>
+          </div>
+        </div>
+
+        <div class="about-card">
+          <div class="about-logo">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+              <rect width="40" height="40" rx="10" fill="#0A0A0A"/>
+              <path d="M10 14h20M10 20h14M10 26h10" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="about-info">
+            <div class="about-name">AutoFill</div>
+            <div class="about-version">Version 2.0.0</div>
+          </div>
+        </div>
+
+        <div class="about-section">
+          <div class="about-section-title">How it works</div>
+          <ol class="how-list">
+            <li>Add your personal information in <strong>My Info</strong> tab (UID, Name, DOB, Branch, etc.)</li>
+            <li>Open any Google Form in Chrome</li>
+            <li>A notification appears automatically near the extension icon</li>
+            <li>Click <strong>Fill this form →</strong> to scan and preview matches</li>
+            <li>Review each match, then confirm to fill the form</li>
+          </ol>
+        </div>
+
+        <div class="about-section">
+          <div class="about-section-title">Features</div>
+          <div class="features-grid">
+            <div class="feature-item">
+              <div class="feature-icon">🔍</div>
+              <div>
+                <div class="feature-title">Fuzzy matching</div>
+                <div class="feature-desc">Alias expansion + Levenshtein + Jaccard keyword overlap</div>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">🛡</div>
+              <div>
+                <div class="feature-title">XSS safe</div>
+                <div class="feature-desc">All DOM manipulation via textContent — no innerHTML</div>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">⚛</div>
+              <div>
+                <div class="feature-title">React-compatible</div>
+                <div class="feature-desc">Uses native prototype setters to trigger Angular/React events</div>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">🔒</div>
+              <div>
+                <div class="feature-title">Local storage only</div>
+                <div class="feature-desc">Your PII never leaves your device</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ════════════════ TAB: BRAIN ══════════════════════ -->
+      <section class="tab-pane" id="paneBrain">
+
+        <!-- Page header -->
+        <div class="page-header">
+          <div class="page-header-text">
+            <h1 class="page-title">Brain</h1>
+            <p class="page-subtitle">Learned concepts, aliases, and confidence scores</p>
+          </div>
+        </div>
+
+        <!-- Status bar -->
+        <div class="brain-status-bar" id="brainStatusBar">
+          <span class="brain-status-text" id="brainStatusText">🧠 Brain active · — concepts · — aliases · — MB / 10 MB</span>
+          <button class="btn-secondary brain-refresh-btn" id="brainRefreshBtn" title="Refresh Brain stats">
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+              <path d="M11 2.5A5.5 5.5 0 1 0 12 6.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12 1v2.5H9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Refresh
+          </button>
+        </div>
+
+        <!-- Brain Settings -->
+        <div class="settings-group">
+          <div class="brain-section-title">Brain Settings</div>
+          <div class="setting-row no-border">
+            <div class="setting-info">
+              <div class="setting-label">Brain Confidence: <strong id="brainConfidenceLabel">75%</strong></div>
+              <div class="setting-desc">Minimum confidence required before Brain auto-fills a field</div>
+            </div>
+          </div>
+          <div class="slider-wrap">
+            <span class="slider-label-lo">Low</span>
+            <input type="range" class="slider" id="brainConfidenceSlider" min="30" max="95" value="75" />
+            <span class="slider-label-hi">High</span>
+          </div>
+          <div class="setting-row no-border">
+            <div class="setting-info">
+              <div class="setting-label">Auto-update on low confidence</div>
+              <div class="setting-desc">Silently update a concept value when confidence is below 60%</div>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="brainAutoUpdateToggle" checked />
+              <div class="toggle-track"><div class="toggle-thumb"></div></div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Concepts table -->
+        <div class="settings-group">
+          <div class="brain-table-wrap" id="brainTableWrap">
+            <div class="brain-table-head">
+              <span class="brain-th brain-th-concept">Concept</span>
+              <span class="brain-th brain-th-value">Value</span>
+              <span class="brain-th brain-th-conf">Conf</span>
+              <span class="brain-th brain-th-manual">Manual Only</span>
+              <span class="brain-th brain-th-actions">Actions</span>
+            </div>
+            <div id="brainTableBody"></div>
+            <div class="brain-empty hidden" id="brainEmpty">
+              <div class="brain-empty-icon">🧠</div>
+              <p class="brain-empty-title">No concepts yet</p>
+              <p class="brain-empty-sub">AutoFill will learn and store concepts as it fills forms</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Export / Import -->
+        <div class="settings-group">
+          <div class="brain-section-title">Data</div>
+          <div class="data-actions">
+            <button class="btn-secondary" id="brainExportBtn">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M7 1v8M4 6l3 3 3-3M1 10v1a2 2 0 002 2h8a2 2 0 002-2v-1"
+                  stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Export Brain JSON
+            </button>
+            <button class="btn-secondary" id="brainImportBtn">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M7 9V1M4 4L7 1l3 3M1 10v1a2 2 0 002 2h8a2 2 0 002-2v-1"
+                  stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Import Brain JSON
+            </button>
+            <input type="file" id="brainImportFile" accept=".json" style="display:none" />
+          </div>
+        </div>
+
+        <!-- Danger zone -->
+        <div class="settings-group">
+          <div class="brain-section-title">Danger Zone</div>
+          <div class="data-actions">
+            <button class="btn-danger" id="brainResetBtn">&#9888; Reset Brain</button>
+          </div>
+        </div>
+
+      </section>
+
+
+    </main><!-- .main -->
+  </div><!-- .app -->
+
+  <script src="dashboard.js"></script>
+  <script src="brain-tab.js"></script>
+</body>
+</html>
