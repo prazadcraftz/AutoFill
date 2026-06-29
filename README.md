@@ -5,7 +5,7 @@
 
   <p>
     <img src="https://img.shields.io/badge/Manifest-V3-blue?style=flat-square" />
-    <img src="https://img.shields.io/badge/Version-3.0.0-green?style=flat-square" />
+    <img src="https://img.shields.io/badge/Version-1.0.0-green?style=flat-square" />
     <img src="https://img.shields.io/badge/Platform-Chrome%20%7C%20Edge-orange?style=flat-square" />
     <img src="https://img.shields.io/badge/License-MIT-lightgrey?style=flat-square" />
   </p>
